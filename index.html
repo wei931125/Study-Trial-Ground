@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>書齋試煉場</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 開始畫面 -->
+<div id="start-screen" class="screen active">
+    <div class="classical-card">
+        <h1>書齋試煉場</h1>
+        <div class="divider"></div>
+        <p>這是一場隨機試煉，系統將從百題庫中挑選 20 題，<br>檢驗你對夏荊山大師生平、哲學與工筆美學的體悟。</p>
+        <button id="start-btn" class="btn primary">開始挑戰</button>
+    </div>
+</div>
+
+        <!-- 測驗畫面 -->
+        <div id="quiz-screen" class="screen">
+            <div class="progress-bar">
+                進度：<span id="current-q-num">1</span> / 20
+            </div>
+            <div class="dialogue-box">
+                <h2 id="question-text">題目載入中...</h2>
+                <div id="options-container" class="options-grid">
+                    <!-- 選項按鈕會透過 JS 動態生成 -->
+                </div>
+            </div>
+            <div class="action-bar">
+                <button id="next-btn" class="btn primary hidden">下一關</button>
+                <button id="submit-btn" class="btn primary hidden">查看結算</button>
+            </div>
+        </div>
+
+        <!-- 結算畫面 -->
+        <div id="result-screen" class="screen">
+            <h1>試煉完成</h1>
+            <div class="score-board">
+                <p>最終得分</p>
+                <h2 id="final-score">0</h2>
+            </div>
+            <p id="feedback-text" class="feedback"></p>
+            <button id="restart-btn" class="btn primary">重新體驗</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,322 @@
+/* 視覺與色彩設計規範 */
+:root {
+    --bg-color: #F4EBD9;      /* 熟宣/絹布 (背景主色) */
+    --text-color: #2F2E2C;    /* 松煙墨 (文字主色) */
+    --border-color: #D5C7B5;  /* 茶褐 (區塊與邊框) */
+    --primary-color: #C34A41; /* 硃砂紅 (主按鈕與強調色) */
+    --primary-hover: #A73322;
+    --secondary-color: #5B7A6B; /* 石綠/石青 (選項按鈕與正確提示) */
+    --secondary-hover: #4A6559;
+    --error-color: #7A7671;   /* 黯灰 (錯誤提示) */
+    
+    /* 新增：更細緻的陰影與漸層 */
+    --shadow-soft: 0 8px 24px rgba(47, 46, 44, 0.08);
+    --shadow-hover: 0 12px 32px rgba(47, 46, 44, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    /* 優化字體設定，確保中文字體的優雅呈現 */
+    font-family: "Noto Serif TC", "PMingLiU", "MingLiU", "宋體", serif; 
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    /* 加入微妙的背景紋理感 (可選，這裡用漸層模擬紙張光影) */
+    background-image: radial-gradient(circle at center, #Fdf6e9 0%, #F4EBD9 100%);
+}
+
+.container {
+    width: 100%;
+    max-width: 850px; /* 稍微加寬，讓排版更大器 */
+    padding: 40px 20px;
+}
+
+/* 畫面切換控制 (淡入淡出) */
+.screen {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+}
+
+.screen.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 1;
+    animation: fadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- 標題與文字排版 --- */
+h1 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 24px;
+    font-size: 3rem; /* 加大標題 */
+    letter-spacing: 6px; /* 增加字距，提升古典感 */
+    font-weight: normal; /* 傳統字體通常不建議過粗 */
+    text-shadow: 1px 1px 2px rgba(195, 74, 65, 0.1);
+}
+
+p {
+    text-align: center;
+    font-size: 1.25rem;
+    line-height: 1.8;
+    margin-bottom: 40px;
+    letter-spacing: 1px;
+    color: #4a4947; /* 稍微調淡內文顏色，增加層次 */
+    max-width: 600px; /* 限制寬度讓閱讀更舒適 */
+}
+
+/* --- 遊戲對話框與區塊 --- */
+.dialogue-box {
+    background-color: #FAf5ef; /* 比背景再亮一點，凸顯主體 */
+    border: 1px solid var(--border-color);
+    border-radius: 12px; /* 稍微增加圓角 */
+    padding: 50px 60px; /* 增加內距，大面積留白 */
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 30px;
+    width: 100%;
+    position: relative;
+}
+
+/* 在對話框內加入裝飾性內框線 (提升古典質感) */
+.dialogue-box::before {
+    content: '';
+    position: absolute;
+    top: 10px; left: 10px; right: 10px; bottom: 10px;
+    border: 1px solid rgba(213, 199, 181, 0.4);
+    border-radius: 6px;
+    pointer-events: none;
+}
+
+#question-text {
+    font-size: 1.5rem;
+    line-height: 1.7;
+    margin-bottom: 40px;
+    color: var(--text-color);
+    text-align: left;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+/* --- 按鈕設計 --- */
+.btn {
+    font-family: inherit;
+    padding: 14px 36px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(47, 46, 44, 0.1);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    letter-spacing: 2px;
+    font-weight: 500;
+}
+
+.btn.primary {
+    background-color: var(--primary-color);
+    color: #fff;
+    
+    /* 以下是確保按鈕絕對置中的關鍵 */
+    display: block;            /* 讓按鈕變成獨立區塊 */
+    margin: 30px auto 0 auto;  /* 上方距離30px，左右自動置中 (auto) */
+    align-self: center;        /* 針對 Flex 排版的雙重保險 */
+}
+
+.btn.primary:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.btn.primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(47, 46, 44, 0.1);
+}
+
+/* --- 選項網格排版 --- */
+.options-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
+
+.option-btn {
+    background-color: #fff;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    text-align: left;
+    padding: 18px 24px;
+    font-size: 1.15rem;
+    line-height: 1.5;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.option-btn::before {
+    /* Hover 時的優雅背景色塊滑動效果 */
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: var(--bg-color);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+    z-index: -1;
+    opacity: 0.5;
+}
+
+.option-btn:hover:not(:disabled) {
+    border-color: var(--secondary-color);
+    color: var(--secondary-hover);
+    transform: translateX(4px); /* Hover時微微向右浮動 */
+}
+
+/* 狀態回饋色彩優化 */
+.option-btn.correct {
+    background-color: var(--secondary-color) !important;
+    color: #fff !important;
+    border-color: var(--secondary-color) !important;
+    box-shadow: 0 4px 12px rgba(91, 122, 107, 0.3);
+}
+
+.option-btn.wrong {
+    background-color: var(--error-color) !important;
+    color: #fff !important;
+    border-color: var(--error-color) !important;
+    opacity: 0.9;
+}
+
+.option-btn:disabled {
+    cursor: default;
+}
+
+/* --- 輔助介面 --- */
+.progress-bar {
+    font-size: 1.1rem;
+    color: var(--secondary-color);
+    margin-bottom: 20px;
+    align-self: flex-start; /* 讓進度條靠左對齊 */
+    padding-left: 10px;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* 視覺化進度短線 */
+.progress-bar::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 2px;
+    background-color: var(--secondary-color);
+}
+
+.action-bar {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* --- 結算畫面特製 --- */
+.score-board {
+    text-align: center;
+    background-color: #FAf5ef;
+    border: 1px solid var(--border-color);
+    padding: 40px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: var(--shadow-soft);
+}
+
+.score-board p {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    color: #666;
+}
+
+#final-score {
+    font-size: 5rem;
+    color: var(--primary-color);
+    font-weight: normal;
+    line-height: 1;
+}
+
+.feedback {
+    font-size: 1.4rem;
+    color: var(--secondary-hover);
+    margin-bottom: 40px;
+    max-width: 600px;
+}
+
+/* RWD 響應式微調 */
+@media (max-width: 600px) {
+    .dialogue-box {
+        padding: 30px 20px;
+    }
+    h1 { font-size: 2rem; }
+    #question-text { font-size: 1.25rem; }
+    .option-btn { padding: 14px 18px; font-size: 1.05rem; }
+}
+
+/* --- 首頁古典裝飾元素 --- */
+
+/* 1. 畫框卷軸底卡 */
+.classical-card {
+    background-color: #FAf5ef;
+    padding: 100px 60px; /* 增加上下左右的內距，讓白框放大、留白更多 */
+    border: 1px solid var(--border-color);
+    border-radius: 2px;
+    box-shadow: var(--shadow-soft);
+    position: relative;
+    width: 100%;
+    max-width: 850px; /* 加寬最大寬度，顯得更落落大方 */
+    margin: 0 auto;
+    
+    /* 製作古典的雙線內框線效果 */
+    outline: 1px solid var(--border-color);
+    outline-offset: -16px; /* 框線距離微調，配合放大的卡片 */
+
+    /* 新增 Flexbox 排版，確保內部所有元素（包含按鈕）絕對水平置中 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 2. 漸層分隔線 */
+.divider {
+    width: 250px; /* 稍微加長分隔線以配合放大的版面 */
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border-color), transparent);
+    margin: 0 auto 35px auto;
+}
+
+/* 微調首頁標題，確保與框線間距和諧 */
+#start-screen h1 {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
