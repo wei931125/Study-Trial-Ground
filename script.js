@@ -192,7 +192,6 @@ function shuffleArray(array) {
 
 // 遊戲初始化
 function startQuiz() {
-    // 從 150 題題庫中隨機打亂並抽取 20 題
     const shuffledBank = shuffleArray(questionBank);
     selectedQuestions = shuffledBank.slice(0, 20);
     
@@ -209,11 +208,9 @@ function loadQuestion() {
     currentQNum.textContent = currentQuestionIndex + 1;
     questionText.textContent = `Q: ${currentQ.q}`;
     
-    // 清空並隨機打亂選項
     optionsContainer.innerHTML = '';
     const shuffledOptions = shuffleArray(currentQ.options);
     
-    // 生成選項按鈕
     shuffledOptions.forEach(option => {
         const btn = document.createElement('button');
         btn.classList.add('btn', 'option-btn');
@@ -222,7 +219,6 @@ function loadQuestion() {
         optionsContainer.appendChild(btn);
     });
 
-    // 隱藏導航按鈕
     nextBtn.classList.add('hidden');
     submitBtn.classList.add('hidden');
 }
@@ -230,8 +226,6 @@ function loadQuestion() {
 // 處理選項點擊
 function selectOption(selectedBtn, selectedText, correctAnswer) {
     const allOptions = optionsContainer.querySelectorAll('.option-btn');
-    
-    // 鎖定所有選項
     allOptions.forEach(btn => btn.disabled = true);
 
     if (selectedText === correctAnswer) {
@@ -239,7 +233,6 @@ function selectOption(selectedBtn, selectedText, correctAnswer) {
         score += 5; // 每題 5 分 (共 20 題，滿分 100)
     } else {
         selectedBtn.classList.add('wrong');
-        // 標出正確答案
         allOptions.forEach(btn => {
             if (btn.textContent === correctAnswer) {
                 btn.classList.add('correct');
@@ -247,7 +240,6 @@ function selectOption(selectedBtn, selectedText, correctAnswer) {
         });
     }
 
-    // 判斷是否為最後一題以顯示對應按鈕
     if (currentQuestionIndex < selectedQuestions.length - 1) {
         nextBtn.classList.remove('hidden');
     } else {
@@ -260,13 +252,12 @@ function showResult() {
     switchScreen(quizScreen, resultScreen);
     finalScore.textContent = score;
 
-    // 根據分數給予評語 (在逗號後加入 <br>，並使用 innerHTML)
     if (score >= 90) {
-        feedbackText.innerHTML = "評語：【天人合一 悟道行者】你的慧眼已能看透畫中禪機，<br>願這份通透伴隨你的人生旅途。";
+        feedbackText.innerHTML = "評語：【天人合一 悟道行者】<br>你的慧眼已能看透畫中禪機，願這份通透伴隨你的人生旅途。";
     } else if (score >= 70) {
-        feedbackText.innerHTML = "評語：【皇家畫師】你的基本功十分扎實，<br>對歷史脈絡與匠人工具都有深刻的了解。";
+        feedbackText.innerHTML = "評語：【皇家畫師】<br>你的基本功十分扎實，對歷史脈絡與匠人工具都有深刻的了解。";
     } else {
-        feedbackText.innerHTML = "評語：【潛力賞畫學徒】悟道之路需要耐心，<br>請繼續保持對藝術的熱忱與初衷。";
+        feedbackText.innerHTML = "評語：【潛力賞畫學徒】<br>悟道之路需要耐心，請繼續保持對藝術的熱忱與初衷。";
     }
 }
 
@@ -275,10 +266,63 @@ function switchScreen(hideScreen, showScreen) {
     hideScreen.classList.remove('active');
     setTimeout(() => {
         showScreen.classList.add('active');
-    }, 300); // 配合 CSS 動畫時間
+    }, 280);
 }
 
-// 綁定事件監聽器
+// ================= 金塵墨霧氛圍動態粒子 (Canvas) =================
+function initAmbientCanvas() {
+    const canvas = document.getElementById('ambient-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let particles = [];
+
+    function resize() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    // 產生 35 顆微光金塵粒子
+    for (let i = 0; i < 35; i++) {
+        particles.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            radius: Math.random() * 2.2 + 0.6,
+            alpha: Math.random() * 0.45 + 0.15,
+            speedY: -(Math.random() * 0.35 + 0.12),
+            speedX: (Math.random() - 0.5) * 0.25,
+            glow: Math.random() * 8 + 4
+        });
+    }
+
+    function renderParticles() {
+        ctx.clearRect(0, 0, width, height);
+        particles.forEach(p => {
+            p.y += p.speedY;
+            p.x += p.speedX;
+            if (p.y < -10) {
+                p.y = height + 10;
+                p.x = Math.random() * width;
+            }
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(197, 160, 89, ${p.alpha})`;
+            ctx.shadowBlur = p.glow;
+            ctx.shadowColor = 'rgba(212, 175, 55, 0.4)';
+            ctx.fill();
+            ctx.restore();
+        });
+        requestAnimationFrame(renderParticles);
+    }
+
+    renderParticles();
+}
+
+// 綁定事件監聽器與初始化
 startBtn.addEventListener('click', startQuiz);
 nextBtn.addEventListener('click', () => {
     currentQuestionIndex++;
@@ -286,3 +330,5 @@ nextBtn.addEventListener('click', () => {
 });
 submitBtn.addEventListener('click', showResult);
 restartBtn.addEventListener('click', () => switchScreen(resultScreen, startScreen));
+
+document.addEventListener('DOMContentLoaded', initAmbientCanvas);

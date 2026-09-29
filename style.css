@@ -1,322 +1,389 @@
-/* 視覺與色彩設計規範 */
+/* ================= 核心古典色系與自訂變數 ================= */
 :root {
-    --bg-color: #F4EBD9;      /* 熟宣/絹布 (背景主色) */
-    --text-color: #2F2E2C;    /* 松煙墨 (文字主色) */
-    --border-color: #D5C7B5;  /* 茶褐 (區塊與邊框) */
-    --primary-color: #C34A41; /* 硃砂紅 (主按鈕與強調色) */
-    --primary-hover: #A73322;
-    --secondary-color: #5B7A6B; /* 石綠/石青 (選項按鈕與正確提示) */
-    --secondary-hover: #4A6559;
-    --error-color: #7A7671;   /* 黯灰 (錯誤提示) */
-    
-    /* 新增：更細緻的陰影與漸層 */
-    --shadow-soft: 0 8px 24px rgba(47, 46, 44, 0.08);
-    --shadow-hover: 0 12px 32px rgba(47, 46, 44, 0.12);
+    --text-color: #241E1A;          /* 松煙深墨 */
+    --border-color: #C8B89E;        /* 古卷茶褐邊框 */
+    --gold-accent: #C5A059;         /* 泥金/金石細線 */
+    --gold-accent-soft: rgba(197, 160, 89, 0.45);
+    --primary-color: #A33A31;       /* 硃砂絳紅 */
+    --primary-hover: #862B23;
+    --secondary-color: #4A6E5D;     /* 沉香松綠（正確提示） */
+    --secondary-hover: #3A574A;
+    --error-color: #706B66;         /* 黯灰（錯誤提示） */
+    --ancient-brown: #664E37;       /* 實木棕框線 */
+    --shadow-soft: 0 16px 45px rgba(45, 30, 15, 0.18);
+    --shadow-hover: 0 18px 40px rgba(163, 58, 49, 0.35);
+
+    /* 雲端保證載入字體清單 */
+    --font-calligraphy: "LXGW WenKai TC", "cwTeXKai", "Kaiti TC", "BiauKai", serif;
+    --font-antique-title: "Noto Serif TC", "LXGW WenKai TC", "cwTeXKai", serif;
 }
 
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    user-select: none;
 }
 
 body {
-    /* 優化字體設定，確保中文字體的優雅呈現 */
-    font-family: "Noto Serif TC", "PMingLiU", "MingLiU", "宋體", serif; 
-    background-color: var(--bg-color);
+    font-family: var(--font-calligraphy); 
     color: var(--text-color);
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    /* 加入微妙的背景紋理感 (可選，這裡用漸層模擬紙張光影) */
-    background-image: radial-gradient(circle at center, #Fdf6e9 0%, #F4EBD9 100%);
+    position: relative;
+
+    /* 宋院澄心堂宣＋天光墨暈暗角 */
+    background-color: #D3C5AE;
+    background-image: 
+        radial-gradient(ellipse at 50% 45%, rgba(255, 252, 245, 0.96) 0%, rgba(240, 230, 212, 0.85) 45%, rgba(186, 170, 145, 0.95) 100%),
+        repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(102, 78, 55, 0.035) 3px, rgba(102, 78, 55, 0.035) 6px),
+        repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(102, 78, 55, 0.035) 3px, rgba(102, 78, 55, 0.035) 6px);
+    box-shadow: inset 0 0 160px rgba(50, 36, 22, 0.45);
 }
 
-.container {
+#ambient-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    max-width: 850px; /* 稍微加寬，讓排版更大器 */
-    padding: 40px 20px;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
 }
 
-/* 畫面切換控制 (淡入淡出) */
+.main-wrapper {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 920px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .screen {
     display: none;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
     opacity: 0;
-    transition: opacity 0.4s ease-in-out;
+    transition: opacity 0.35s ease-in-out;
 }
 
 .screen.active {
     display: flex;
-    flex-direction: column;
-    align-items: center;
     opacity: 1;
-    animation: fadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    animation: fadeIn 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(15px); }
+    from { opacity: 0; transform: translateY(12px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- 標題與文字排版 --- */
-h1 {
-    text-align: center;
-    color: var(--primary-color);
-    margin-bottom: 24px;
-    font-size: 3rem; /* 加大標題 */
-    letter-spacing: 6px; /* 增加字距，提升古典感 */
-    font-weight: normal; /* 傳統字體通常不建議過粗 */
-    text-shadow: 1px 1px 2px rgba(195, 74, 65, 0.1);
-}
-
-p {
-    text-align: center;
-    font-size: 1.25rem;
-    line-height: 1.8;
-    margin-bottom: 40px;
-    letter-spacing: 1px;
-    color: #4a4947; /* 稍微調淡內文顏色，增加層次 */
-    max-width: 600px; /* 限制寬度讓閱讀更舒適 */
-}
-
-/* --- 遊戲對話框與區塊 --- */
-.dialogue-box {
-    background-color: #FAf5ef; /* 比背景再亮一點，凸顯主體 */
-    border: 1px solid var(--border-color);
-    border-radius: 12px; /* 稍微增加圓角 */
-    padding: 50px 60px; /* 增加內距，大面積留白 */
-    box-shadow: var(--shadow-soft);
-    margin-bottom: 30px;
+/* 核心裝裱卡片 */
+.classical-card, .dialogue-box {
     width: 100%;
+    background: linear-gradient(135deg, rgba(255, 253, 248, 0.97) 0%, rgba(247, 241, 230, 0.93) 100%);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 2px solid var(--ancient-brown);
+    border-radius: 6px;
+    padding: 10px;
+    box-shadow: var(--shadow-soft), inset 0 0 45px rgba(200, 184, 158, 0.25);
     position: relative;
 }
 
-/* 在對話框內加入裝飾性內框線 (提升古典質感) */
-.dialogue-box::before {
-    content: '';
+.card-inner-frame, .box-inner-frame {
+    border: 1.5px solid var(--gold-accent);
+    border-radius: 4px;
+    padding: 55px 50px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.corner-knot {
     position: absolute;
-    top: 10px; left: 10px; right: 10px; bottom: 10px;
-    border: 1px solid rgba(213, 199, 181, 0.4);
-    border-radius: 6px;
-    pointer-events: none;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--primary-color);
+}
+.corner-knot.top-left     { top: 5px; left: 5px; border-right: none; border-bottom: none; }
+.corner-knot.top-right    { top: 5px; right: 5px; border-left: none; border-bottom: none; }
+.corner-knot.bottom-left  { bottom: 5px; left: 5px; border-right: none; border-top: none; }
+.corner-knot.bottom-right { bottom: 5px; right: 5px; border-left: none; border-top: none; }
+
+.header-seal-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
 }
 
-#question-text {
-    font-size: 1.5rem;
-    line-height: 1.7;
-    margin-bottom: 40px;
-    color: var(--text-color);
-    text-align: left;
-    letter-spacing: 1px;
-    font-weight: bold;
+.ancient-tag {
+    font-family: var(--font-calligraphy);
+    font-size: 14.5px;
+    color: var(--gold-accent);
+    letter-spacing: 4px;
+    font-weight: 600;
+    border: 1.5px solid var(--gold-accent-soft);
+    padding: 3px 20px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
 }
 
-/* --- 按鈕設計 --- */
-.btn {
-    font-family: inherit;
-    padding: 14px 36px;
-    font-size: 1.2rem;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(47, 46, 44, 0.1);
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+h1 {
+    font-family: var(--font-antique-title);
+    font-size: 3.4rem;
+    font-weight: 900;
+    color: var(--primary-color);
+    letter-spacing: 12px;
+    text-indent: 12px;
+    line-height: 1.25;
+    text-shadow: 0.5px 0.5px 1px rgba(163, 58, 49, 0.35), 0 0 15px rgba(255, 255, 255, 0.8);
+    transition: transform 0.3s ease;
+}
+
+h1:hover {
+    transform: scale(1.02);
+}
+
+.divider {
+    width: 340px;
+    height: 1.5px;
+    background: linear-gradient(90deg, transparent 0%, var(--ancient-brown) 50%, transparent 100%);
+    margin: 18px auto 26px auto;
+}
+
+p.subtitle {
+    font-family: var(--font-calligraphy);
+    font-size: 1.35rem;
+    line-height: 1.9;
     letter-spacing: 2px;
+    color: #4A4036;
+    margin-bottom: 35px;
     font-weight: 500;
 }
 
-.btn.primary {
-    background-color: var(--primary-color);
-    color: #fff;
-    
-    /* 以下是確保按鈕絕對置中的關鍵 */
-    display: block;            /* 讓按鈕變成獨立區塊 */
-    margin: 30px auto 0 auto;  /* 上方距離30px，左右自動置中 (auto) */
-    align-self: center;        /* 針對 Flex 排版的雙重保險 */
+/* ================= 題目對話框 ================= */
+.dialogue-box {
+    padding: 8px;
 }
 
-.btn.primary:hover {
-    background-color: var(--primary-hover);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-hover);
+.box-inner-frame {
+    padding: 35px 42px;
+    align-items: stretch;
+    text-align: left;
 }
 
-.btn.primary:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 4px rgba(47, 46, 44, 0.1);
+/* 題目題幹：維持粗體 */
+#question-text {
+    font-family: var(--font-calligraphy);
+    font-size: 1.5rem;
+    line-height: 1.75;
+    margin-bottom: 28px;
+    color: var(--text-color);
+    letter-spacing: 1.5px;
+    font-weight: bold !important;
+    border-left: 5px solid var(--primary-color);
+    padding-left: 16px;
+    text-shadow: 0 0 1px rgba(36, 30, 26, 0.2);
 }
 
-/* --- 選項網格排版 --- */
+/* ================= 選項網格與按鈕美化 ================= */
 .options-grid {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 14px;
     width: 100%;
 }
 
+/* 選項按鈕：取消粗體，採用標準清秀字重 */
 .option-btn {
-    background-color: #fff;
+    font-family: var(--font-calligraphy);
+    background-color: rgba(255, 254, 250, 0.98);
     color: var(--text-color);
-    border: 1px solid var(--border-color);
+    border: 1.5px solid rgba(197, 179, 154, 0.85);
+    border-left: 5px solid rgba(102, 78, 55, 0.4);
     text-align: left;
-    padding: 18px 24px;
-    font-size: 1.15rem;
+    padding: 16px 24px;
+    font-size: 1.25rem;
     line-height: 1.5;
-    border-radius: 8px;
+    border-radius: 4px;
     position: relative;
-    overflow: hidden;
-}
-
-.option-btn::before {
-    /* Hover 時的優雅背景色塊滑動效果 */
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-color: var(--bg-color);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.3s ease;
-    z-index: -1;
-    opacity: 0.5;
+    cursor: pointer;
+    letter-spacing: 1.5px;
+    font-weight: normal !important;
+    text-shadow: none !important;
+    transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    box-shadow: 0 3px 8px rgba(45, 30, 15, 0.04);
 }
 
 .option-btn:hover:not(:disabled) {
-    border-color: var(--secondary-color);
-    color: var(--secondary-hover);
-    transform: translateX(4px); /* Hover時微微向右浮動 */
+    border-color: var(--primary-color);
+    border-left-color: var(--primary-color);
+    background-color: #FAF2E3;
+    transform: translateX(6px);
+    box-shadow: 0 5px 15px rgba(163, 58, 49, 0.15);
 }
 
-/* 狀態回饋色彩優化 */
+/* 選中回饋狀態 */
 .option-btn.correct {
     background-color: var(--secondary-color) !important;
-    color: #fff !important;
+    color: #FFF !important;
     border-color: var(--secondary-color) !important;
-    box-shadow: 0 4px 12px rgba(91, 122, 107, 0.3);
+    border-left-color: #2E473B !important;
+    box-shadow: 0 4px 15px rgba(74, 110, 93, 0.35);
 }
 
 .option-btn.wrong {
     background-color: var(--error-color) !important;
-    color: #fff !important;
+    color: #FFF !important;
     border-color: var(--error-color) !important;
-    opacity: 0.9;
+    border-left-color: #4D4A47 !important;
 }
 
 .option-btn:disabled {
     cursor: default;
 }
 
-/* --- 輔助介面 --- */
+/* ================= 進度標示條 ================= */
 .progress-bar {
-    font-size: 1.1rem;
-    color: var(--secondary-color);
-    margin-bottom: 20px;
-    align-self: flex-start; /* 讓進度條靠左對齊 */
-    padding-left: 10px;
-    letter-spacing: 2px;
+    align-self: flex-start;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+    margin-bottom: 14px;
 }
 
-/* 視覺化進度短線 */
-.progress-bar::before {
-    content: '';
-    display: inline-block;
-    width: 24px;
-    height: 2px;
-    background-color: var(--secondary-color);
+.progress-label {
+    font-family: var(--font-calligraphy);
+    font-size: 1.15rem;
+    color: var(--ancient-brown);
+    font-weight: 600;
+    letter-spacing: 3px;
 }
 
+.progress-pill {
+    font-family: var(--font-calligraphy);
+    background: rgba(255, 252, 245, 0.9);
+    border: 1.5px solid var(--gold-accent);
+    padding: 3px 18px;
+    border-radius: 20px;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.divider-slash {
+    color: #9C8F7E;
+    margin: 0 3px;
+}
+
+/* ================= 操作通用按鈕 ================= */
 .action-bar {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-top: 10px;
+    margin-top: 20px;
+}
+
+.btn {
+    font-family: var(--font-calligraphy);
+    font-size: 1.35rem;
+    padding: 12px 50px;
+    border: none;
+    border-radius: 35px;
+    cursor: pointer;
+    letter-spacing: 5px;
+    text-indent: 5px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn.primary {
+    background: linear-gradient(180deg, #A33A31 0%, #822720 100%);
+    color: #FFF;
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 6px 20px rgba(163, 58, 49, 0.3);
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.btn.primary:hover {
+    background: linear-gradient(180deg, #B54238 0%, #912E27 100%);
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: var(--shadow-hover);
 }
 
 .hidden {
     display: none !important;
 }
 
-/* --- 結算畫面特製 --- */
-.score-board {
-    text-align: center;
-    background-color: #FAf5ef;
-    border: 1px solid var(--border-color);
-    padding: 40px;
-    border-radius: 12px;
-    margin-bottom: 30px;
-    width: 100%;
-    max-width: 400px;
-    box-shadow: var(--shadow-soft);
+/* ================= 結算專區美化 ================= */
+.result-wrapper .card-inner-frame {
+    padding: 45px 50px;
 }
 
-.score-board p {
-    margin-bottom: 10px;
-    font-size: 1.2rem;
-    color: #666;
+.result-title {
+    font-family: var(--font-antique-title);
+    font-size: 3.2rem;
+    font-weight: 900;
+    color: var(--primary-color);
+    letter-spacing: 10px;
+    text-indent: 10px;
+}
+
+.score-board {
+    background: rgba(255, 255, 255, 0.75);
+    border: 2px dashed var(--gold-accent);
+    border-radius: 12px;
+    padding: 24px 50px;
+    margin-bottom: 24px;
+    box-shadow: inset 0 0 20px rgba(197, 160, 89, 0.1);
+}
+
+.score-label {
+    font-family: var(--font-calligraphy);
+    font-size: 1.25rem;
+    color: var(--ancient-brown);
+    letter-spacing: 3px;
+    margin-bottom: 6px;
+    font-weight: 600;
 }
 
 #final-score {
-    font-size: 5rem;
+    font-family: var(--font-antique-title);
+    font-size: 5.5rem;
     color: var(--primary-color);
-    font-weight: normal;
+    font-weight: 900;
     line-height: 1;
+    text-shadow: 1px 2px 4px rgba(163, 58, 49, 0.2);
 }
 
 .feedback {
-    font-size: 1.4rem;
-    color: var(--secondary-hover);
-    margin-bottom: 40px;
-    max-width: 600px;
+    font-family: var(--font-calligraphy);
+    font-size: 1.45rem;
+    line-height: 1.85;
+    color: var(--secondary-color);
+    margin-bottom: 30px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
 }
 
-/* RWD 響應式微調 */
-@media (max-width: 600px) {
-    .dialogue-box {
-        padding: 30px 20px;
-    }
-    h1 { font-size: 2rem; }
+@media (max-width: 768px) {
+    .card-inner-frame, .box-inner-frame { padding: 35px 20px; }
+    h1 { font-size: 2.6rem; letter-spacing: 8px; text-indent: 8px; }
     #question-text { font-size: 1.25rem; }
-    .option-btn { padding: 14px 18px; font-size: 1.05rem; }
-}
-
-/* --- 首頁古典裝飾元素 --- */
-
-/* 1. 畫框卷軸底卡 */
-.classical-card {
-    background-color: #FAf5ef;
-    padding: 100px 60px; /* 增加上下左右的內距，讓白框放大、留白更多 */
-    border: 1px solid var(--border-color);
-    border-radius: 2px;
-    box-shadow: var(--shadow-soft);
-    position: relative;
-    width: 100%;
-    max-width: 850px; /* 加寬最大寬度，顯得更落落大方 */
-    margin: 0 auto;
-    
-    /* 製作古典的雙線內框線效果 */
-    outline: 1px solid var(--border-color);
-    outline-offset: -16px; /* 框線距離微調，配合放大的卡片 */
-
-    /* 新增 Flexbox 排版，確保內部所有元素（包含按鈕）絕對水平置中 */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-/* 2. 漸層分隔線 */
-.divider {
-    width: 250px; /* 稍微加長分隔線以配合放大的版面 */
-    height: 1px;
-    background: linear-gradient(to right, transparent, var(--border-color), transparent);
-    margin: 0 auto 35px auto;
-}
-
-/* 微調首頁標題，確保與框線間距和諧 */
-#start-screen h1 {
-    margin-top: 10px;
-    margin-bottom: 20px;
+    .option-btn { font-size: 1.1rem; padding: 13px 18px; }
 }

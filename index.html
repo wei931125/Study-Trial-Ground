@@ -4,45 +4,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>書齋試煉場</title>
+    
+    <!-- 1. Google 思源宋體 (特黑金石刻本標題) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;900&display=swap" rel="stylesheet">
+    
+    <!-- 2. 雲端書法楷書字庫：霞鶩文楷 繁體 (免安裝，任何電腦保證 100% 跑得出手寫毛筆韻味) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-tc-web/style.css">
+    
+    <!-- 3. Google 官方繁體毛筆楷體：cwTeXKai (雙保險備用) -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/earlyaccess/cwtexkai.css">
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- 開始畫面 -->
-<div id="start-screen" class="screen active">
-    <div class="classical-card">
-        <h1>書齋試煉場</h1>
-        <div class="divider"></div>
-        <p>這是一場隨機試煉，系統將從百題庫中挑選 20 題，<br>檢驗你對夏荊山大師生平、哲學與工筆美學的體悟。</p>
-        <button id="start-btn" class="btn primary">開始挑戰</button>
-    </div>
-</div>
+    <!-- 背景動態金塵與墨霧微光畫布 -->
+    <canvas id="ambient-canvas"></canvas>
+
+    <!-- 主容器 -->
+    <div class="main-wrapper">
+        <!-- 開始畫面 -->
+        <div id="start-screen" class="screen active">
+            <div class="classical-card">
+                <div class="card-inner-frame">
+                    <span class="corner-knot top-left"></span>
+                    <span class="corner-knot top-right"></span>
+                    <span class="corner-knot bottom-left"></span>
+                    <span class="corner-knot bottom-right"></span>
+                    
+                    <div class="header-seal-wrap">
+                        <span class="ancient-tag">文人試煉</span>
+                        <h1>書齋試煉場</h1>
+                    </div>
+                    <div class="divider"></div>
+                    <p class="subtitle">這是一場隨機試煉，系統將從百題庫中精選 20 題，<br>檢驗你對夏荊山大師生平、哲學與工筆美學的體悟。</p>
+                    <button id="start-btn" class="btn primary">開始挑戰</button>
+                </div>
+            </div>
+        </div>
 
         <!-- 測驗畫面 -->
         <div id="quiz-screen" class="screen">
             <div class="progress-bar">
-                進度：<span id="current-q-num">1</span> / 20
-            </div>
-            <div class="dialogue-box">
-                <h2 id="question-text">題目載入中...</h2>
-                <div id="options-container" class="options-grid">
-                    <!-- 選項按鈕會透過 JS 動態生成 -->
+                <span class="progress-label">試煉進程</span>
+                <div class="progress-pill">
+                    <span id="current-q-num">1</span> <span class="divider-slash">/</span> 20
                 </div>
             </div>
+            
+            <div class="dialogue-box">
+                <div class="box-inner-frame">
+                    <h2 id="question-text">題目載入中...</h2>
+                    <div id="options-container" class="options-grid">
+                        <!-- 選項按鈕會透過 JS 動態生成 -->
+                    </div>
+                </div>
+            </div>
+            
             <div class="action-bar">
-                <button id="next-btn" class="btn primary hidden">下一關</button>
-                <button id="submit-btn" class="btn primary hidden">查看結算</button>
+                <button id="next-btn" class="btn primary hidden">下一關 ➔</button>
+                <button id="submit-btn" class="btn primary hidden">查看結算 ➔</button>
             </div>
         </div>
 
         <!-- 結算畫面 -->
         <div id="result-screen" class="screen">
-            <h1>試煉完成</h1>
-            <div class="score-board">
-                <p>最終得分</p>
-                <h2 id="final-score">0</h2>
+            <div class="classical-card result-wrapper">
+                <div class="card-inner-frame">
+                    <h1 class="result-title">試煉完成</h1>
+                    <div class="divider"></div>
+                    <div class="score-board">
+                        <p class="score-label">試煉最終得分</p>
+                        <h2 id="final-score">0</h2>
+                    </div>
+                    <div id="feedback-text" class="feedback"></div>
+                    <button id="restart-btn" class="btn primary">重新體驗</button>
+                </div>
             </div>
-            <p id="feedback-text" class="feedback"></p>
-            <button id="restart-btn" class="btn primary">重新體驗</button>
         </div>
     </div>
 
