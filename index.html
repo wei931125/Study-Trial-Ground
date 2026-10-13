@@ -10,10 +10,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;900&display=swap" rel="stylesheet">
     
-    <!-- 2. 雲端書法楷書字庫：霞鶩文楷 繁體 (免安裝，任何電腦保證 100% 跑得出手寫毛筆韻味) -->
+    <!-- 2. 雲端書法楷書字庫：霞鶩文楷 繁體 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-tc-web/style.css">
     
-    <!-- 3. Google 官方繁體毛筆楷體：cwTeXKai (雙保險備用) -->
+    <!-- 3. Google 官方繁體毛筆楷體：cwTeXKai -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/earlyaccess/cwtexkai.css">
     
     <link rel="stylesheet" href="style.css">
@@ -39,6 +39,13 @@
                     </div>
                     <div class="divider"></div>
                     <p class="subtitle">這是一場隨機試煉，系統將從百題庫中精選 20 題，<br>檢驗你對夏荊山大師生平、哲學與工筆美學的體悟。</p>
+                    
+                    <!-- 使用者帳號輸入區塊 -->
+                    <div class="user-input-box">
+                        <label for="username-input" class="user-input-label">請留名（姓名或帳號）：</label>
+                        <input type="text" id="username-input" class="ancient-input" placeholder="例如：姓名 / 帳號" maxlength="20">
+                    </div>
+                    
                     <button id="start-btn" class="btn primary">開始挑戰</button>
                 </div>
             </div>
@@ -79,6 +86,7 @@
                         <h2 id="final-score">0</h2>
                     </div>
                     <div id="feedback-text" class="feedback"></div>
+                    <div id="sync-status" class="sync-status-text">成績登記中...</div>
                     <button id="restart-btn" class="btn primary">重新體驗</button>
                 </div>
             </div>

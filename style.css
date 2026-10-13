@@ -25,16 +25,51 @@
     user-select: none;
 }
 
+/* ================= 自訂古風可拖曳滾動條 (頁面與區塊皆適用) ================= */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(211, 197, 174, 0.5); /* 澄心宣紙色底軌道 */
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #C5A059 0%, #A33A31 100%); /* 泥金轉硃砂滑桿 */
+    border-radius: 5px;
+    border: 1.5px solid rgba(255, 252, 245, 0.7);
+    cursor: grab;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #A33A31 0%, #822720 100%);
+}
+
+::-webkit-scrollbar-thumb:active {
+    cursor: grabbing;
+}
+
+/* 支援 Firefox 滾動條樣式 */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #C5A059 rgba(211, 197, 174, 0.5);
+}
+
 body {
     font-family: var(--font-calligraphy); 
     color: var(--text-color);
     width: 100vw;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
+    /* 取消原本鎖死畫面的 overflow: hidden，改為允許縱向滑動並始終顯示滾動條 */
+    overflow-x: hidden;
+    overflow-y: auto;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
+    padding: 30px 0; /* 上下留白，避免頂到上下邊界 */
 
     /* 宋院澄心堂宣＋天光墨暈暗角 */
     background-color: #D3C5AE;
@@ -46,11 +81,11 @@ body {
 }
 
 #ambient-canvas {
-    position: absolute;
+    position: fixed; /* 改為 fixed，讓粒子背景在滾動時依然平鋪覆蓋整個視窗 */
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     z-index: 1;
     pointer-events: none;
 }
@@ -61,6 +96,7 @@ body {
     width: 100%;
     max-width: 920px;
     padding: 20px;
+    margin: auto 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -102,7 +138,7 @@ body {
 .card-inner-frame, .box-inner-frame {
     border: 1.5px solid var(--gold-accent);
     border-radius: 4px;
-    padding: 55px 50px;
+    padding: 45px 50px;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -186,7 +222,6 @@ p.subtitle {
     text-align: left;
 }
 
-/* 題目題幹：維持粗體 */
 #question-text {
     font-family: var(--font-calligraphy);
     font-size: 1.5rem;
@@ -208,7 +243,6 @@ p.subtitle {
     width: 100%;
 }
 
-/* 選項按鈕：取消粗體，採用標準清秀字重 */
 .option-btn {
     font-family: var(--font-calligraphy);
     background-color: rgba(255, 254, 250, 0.98);
@@ -237,7 +271,6 @@ p.subtitle {
     box-shadow: 0 5px 15px rgba(163, 58, 49, 0.15);
 }
 
-/* 選中回饋狀態 */
 .option-btn.correct {
     background-color: var(--secondary-color) !important;
     color: #FFF !important;
@@ -332,7 +365,7 @@ p.subtitle {
 
 /* ================= 結算專區美化 ================= */
 .result-wrapper .card-inner-frame {
-    padding: 45px 50px;
+    padding: 40px 45px;
 }
 
 .result-title {
@@ -348,8 +381,8 @@ p.subtitle {
     background: rgba(255, 255, 255, 0.75);
     border: 2px dashed var(--gold-accent);
     border-radius: 12px;
-    padding: 24px 50px;
-    margin-bottom: 24px;
+    padding: 20px 45px;
+    margin-bottom: 20px;
     box-shadow: inset 0 0 20px rgba(197, 160, 89, 0.1);
 }
 
@@ -358,13 +391,13 @@ p.subtitle {
     font-size: 1.25rem;
     color: var(--ancient-brown);
     letter-spacing: 3px;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     font-weight: 600;
 }
 
 #final-score {
     font-family: var(--font-antique-title);
-    font-size: 5.5rem;
+    font-size: 5rem;
     color: var(--primary-color);
     font-weight: 900;
     line-height: 1;
@@ -373,12 +406,18 @@ p.subtitle {
 
 .feedback {
     font-family: var(--font-calligraphy);
-    font-size: 1.45rem;
-    line-height: 1.85;
+    font-size: 1.35rem;
+    line-height: 1.8;
     color: var(--secondary-color);
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     font-weight: 600;
     letter-spacing: 1.5px;
+}
+
+/* 重新體驗按鈕下方外距，保證滾動到底時不會緊貼邊界 */
+#restart-btn {
+    margin-top: 15px;
+    margin-bottom: 10px;
 }
 
 @media (max-width: 768px) {
@@ -386,4 +425,53 @@ p.subtitle {
     h1 { font-size: 2.6rem; letter-spacing: 8px; text-indent: 8px; }
     #question-text { font-size: 1.25rem; }
     .option-btn { font-size: 1.1rem; padding: 13px 18px; }
+}
+
+/* ================= 使用者帳號輸入框與同步提示 ================= */
+.user-input-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 25px;
+    width: 100%;
+    max-width: 320px;
+}
+
+.user-input-label {
+    font-family: var(--font-calligraphy);
+    font-size: 1.15rem;
+    color: var(--ancient-brown);
+    font-weight: 600;
+    letter-spacing: 2px;
+}
+
+.ancient-input {
+    width: 100%;
+    font-family: var(--font-calligraphy);
+    font-size: 1.2rem;
+    padding: 10px 18px;
+    background: rgba(255, 254, 250, 0.95);
+    border: 1.5px solid var(--gold-accent);
+    border-radius: 6px;
+    color: var(--text-color);
+    text-align: center;
+    outline: none;
+    transition: all 0.25s ease;
+    box-shadow: inset 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.ancient-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(163, 58, 49, 0.25);
+    background: #FFF;
+}
+
+.sync-status-text {
+    font-family: var(--font-calligraphy);
+    font-size: 1.1rem;
+    color: var(--ancient-brown);
+    margin-bottom: 15px;
+    font-style: italic;
+    letter-spacing: 1.5px;
 }
